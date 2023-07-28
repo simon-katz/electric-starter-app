@@ -40,6 +40,7 @@
 
 (e/defn Todo-list []
   (e/server
+   (println "**** server.stuff/!conn =" server.stuff/!conn)
    (binding [db (e/watch server.stuff/!conn)]
      (e/client
       (dom/link (dom/props {:rel :stylesheet :href "/todo-list.css"}))
