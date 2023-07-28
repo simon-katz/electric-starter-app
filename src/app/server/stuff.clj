@@ -5,6 +5,11 @@
 
 ;; TODO: What is this `db` here, and how is it set up in the
 ;;       `app.todo-list` namespace?
+;;       - Oh! See the binding of `db` in `app.todo-list`.\
+;;       - `e/watch` creates a reactive value from a reference.
+
+;; TODO: Where is the datascript dependency coming from? Not in deps.edn, right?
+;;       Is it part of Electric? (That would be weird, right?)
 
 (defn create-item! [v]
   (d/transact! !conn
