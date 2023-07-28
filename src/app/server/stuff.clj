@@ -5,6 +5,8 @@
 
 ;; TODO: What is this `db` here, and how is it set up in the
 ;;       `app.todo-list` namespace?
+;;       - Oh! See the binding of `db` in `app.todo-list`.\
+;;       - `e/watch` creates a reactive value from a reference.
 
 (defn create-item! [v]
   (d/transact! !conn
