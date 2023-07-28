@@ -8,6 +8,9 @@
 ;;       - Oh! See the binding of `db` in `app.todo-list`.\
 ;;       - `e/watch` creates a reactive value from a reference.
 
+;; TODO: Copy this to a new repo where the DB is a set of rules and
+;;       events, and have at it!
+
 (defn create-item! [v]
   (d/transact! !conn
                [{:task/description v
