@@ -48,6 +48,10 @@
           (e/client
             (dom/link (dom/props {:rel :stylesheet :href "/todo-list.css"}))
             (dom/h1 (dom/text "minimal todo list"))
+            (dom/p (dom/text (e/server (str "DB: "
+                                            (if server.stuff/use-atom-for-db?
+                                              "Atom"
+                                              "DataScript")))))
             (dom/p (dom/text "it's multiplayer, try two tabs"))
             (dom/div (dom/props {:class "todo-list"})
                      (TodoCreate.)

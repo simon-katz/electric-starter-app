@@ -1,14 +1,15 @@
 (ns app.server.stuff
   (:require
-   [com.nomistech.clj-utils :as clj-utils]
-   [datascript.core :as d]
-   [medley.core :as medley]))
+   [app.server.task-db :as task-db]
+   [app.server.task-db-impls.clojure-atom-db :as atom-db]
+   [app.server.task-db-impls.datascript-db :as datascript-db]))
 
 (def use-atom-for-db? true)
 
-(defonce !atom-db (atom []))
-
-(defonce !conn (d/create-conn {}))
+(defn !the-db []
+  (if use-atom-for-db?
+    atom-db/the-db
+    datascript-db/the-db))
 
 ;; TODO: What is this `db` here, and how is it set up in the
 ;;       `app.todo-list` namespace?
@@ -19,49 +20,22 @@
 ;;       events, and have at it!
 
 (defn !db-ref []
-  (if use-atom-for-db?
-    !atom-db
-    !conn))
+  (task-db/get-!db-ref (!the-db)))
 
 (defn create-item! [v]
-  (if use-atom-for-db?
-    (swap! !atom-db conj {:xxxx/id          (java.util.UUID/randomUUID)
-                          :task/description v
-                          :task/status      :active})
-    (d/transact! !conn
-                 [{:task/description v
-                   :task/status :active}])))
+  (task-db/create-item! (!the-db) v)
+  nil)
 
 (defn toggle-item! [id v]
-  (if use-atom-for-db?
-    (let [old-val @!atom-db
-          pos     (clj-utils/position #(= id (:xxxx/id %))
-                                      old-val)
-          new-val (assoc-in old-val [pos :task/status] (if v :done :active))]
-      (compare-and-set! !atom-db old-val new-val))
-    (d/transact! !conn
-                 [{:db/id id
-                   :task/status (if v :done :active)}])))
+  (task-db/toggle-item! (!the-db) id v)
+  nil)
 
 (defn get-item [db id]
-  (if use-atom-for-db?
-    (medley/find-first #(= id (:xxxx/id %))
-                       db)
-    (d/entity db id)))
-
+  (task-db/get-item (!the-db) db id))
 
 (defn todo-records [db]
-  (let [items (if use-atom-for-db?
-                db
-                (d/q '[:find [(pull ?e [:db/id :task/description]) ...]
-                       :where [?e :task/status]] db))]
-    (->> items
-         (sort-by :task/description))))
+  (task-db/todo-records (!the-db) db))
 
 (defn todo-count [db]
   (println "**** db =" db)
-  (if use-atom-for-db?
-    (count (filter #(= :active (:task/status %)) db))
-    (count
-     (d/q '[:find [?e ...] :in $ ?status
-            :where [?e :task/status ?status]] db :active))))
+  (task-db/todo-count (!the-db) db))
