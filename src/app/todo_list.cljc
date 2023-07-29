@@ -43,8 +43,8 @@
   (e/client
     (binding [dom/node js/document.body]
       (e/server
-        (println "**** server.stuff/!conn =" server.stuff/!conn)
-        (binding [db (e/watch server.stuff/!conn)]
+        (println "**** (server.stuff/!db-ref) =" (server.stuff/!db-ref))
+        (binding [db (e/watch (server.stuff/!db-ref))]
           (e/client
             (dom/link (dom/props {:rel :stylesheet :href "/todo-list.css"}))
             (dom/h1 (dom/text "minimal todo list"))
@@ -53,8 +53,13 @@
                      (TodoCreate.)
                      (dom/div {:class "todo-items"}
                               (e/server
-                                (e/for-by :db/id [{:keys [db/id]} (server.stuff/todo-records db)]
-                                  (TodoItem. id))))
+                                (if server.stuff/use-atom-for-db?
+                                  (e/for-by :xxxx/id
+                                      [{:keys [xxxx/id]} (server.stuff/todo-records db)]
+                                    (TodoItem. id))
+                                  (e/for-by :db/id
+                                      [{:keys [db/id]} (server.stuff/todo-records db)]
+                                    (TodoItem. id)))))
                      (dom/p (dom/props {:class "counter"})
                             (dom/span (dom/props {:class "count"})
                                       (dom/text (e/server (server.stuff/todo-count db))))
