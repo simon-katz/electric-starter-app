@@ -1,4 +1,4 @@
-(ns app.server.stuff
+(ns app.server.server
   (:require
    [app.server.task-db :as task-db]
    [app.server.task-db-impls.clojure-atom-db :as atom-db]
