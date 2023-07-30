@@ -3,7 +3,7 @@
    [app.server.task-db :as task-db]
    [datascript.core :as d]))
 
-(defrecord DatascriptTaskDB [!conn]
+(defrecord DataScriptTaskDB [!conn]
   task-db/TasksDB
   (get-!db-ref [_]
     !conn)
@@ -29,4 +29,4 @@
             :where [?e :task/status ?status]] db :active))))
 
 (defonce the-db
-  (->DatascriptTaskDB (d/create-conn {})))
+  (->DataScriptTaskDB (d/create-conn {})))
