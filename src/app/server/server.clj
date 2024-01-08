@@ -19,9 +19,6 @@
 ;;           to understand, because you know how atoms work and you
 ;;           don't have to think about where the magic lives.
 
-;; TODO: Where is the datascript dependency coming from? Not in deps.edn, right?
-;;       - Electric has it as a dependency. Is that weird?
-
 ;; TODO: Copy this to a new repo where the DB is a set of rules and
 ;;       events, and have at it!
 
