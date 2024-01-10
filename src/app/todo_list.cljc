@@ -52,7 +52,7 @@
                       :where [?e :task/status]] db)
             (sort-by :task/description))))
 
-(e/defn Todo-list []
+(e/defn Todo-list [ring-request]
   (e/client
     (binding [dom/node js/document.body]
       (e/server
