@@ -68,7 +68,7 @@
       ;; index.html file not found on classpath
       (next-handler ring-req))))
 
-(def ^:const VERSION (not-empty (System/getProperty "HYPERFIDDLE_ELECTRIC_SERVER_VERSION"))) ; see Dockerfile
+(def ^:const VERSION (not-empty (System/getProperty "ELECTRIC_USER_VERSION"))) ; see Dockerfile
 
 (defn wrap-reject-stale-client
   "Intercept websocket UPGRADE request and check if client and server versions matches.
@@ -77,7 +77,7 @@
   [next-handler]
   (fn [ring-req]
     (if (ring/ws-upgrade-request? ring-req)
-      (let [client-version (get-in ring-req [:query-params "HYPERFIDDLE_ELECTRIC_CLIENT_VERSION"])]
+      (let [client-version (get-in ring-req [:query-params "ELECTRIC_USER_VERSION"])]
         (cond
           (nil? VERSION)             (next-handler ring-req)
           (= client-version VERSION) (next-handler ring-req)
