@@ -5,6 +5,17 @@
             [hyperfiddle.electric-dom2 :as dom]
             [hyperfiddle.electric-ui4 :as ui]))
 
+;; TODO: electric-starter-app is deprecated.
+;;       See https://github.com/hyperfiddle/electric-starter-app.
+;;       BUT:
+;;       - Isn't this here an example of how to make an app?
+;;       - And isn't the hyperfiddle stuff about a bunch of fiddles?
+;;         - (I only have  vague idea of what a fiddle is. A demo?)
+;;         - And not about how to make an app?
+;;         - /eg/ the git submodule stuff.
+;;       OH!
+;;       - But it has "Prod build" (see https://github.com/simon-katz/electric-fiddle).
+
 (e/def db) ; injected database ref; Electric defs are always dynamic
 
 (e/defn TodoItem [id]
