@@ -31,6 +31,7 @@
        (sort-by :task/description)))
 
 (defn todo-count [db]
+  (println "**** db =" db)
   (count
    (d/q '[:find [?e ...] :in $ ?status
           :where [?e :task/status ?status]] db :active)))
