@@ -4,9 +4,12 @@
    [app.server.task-db-impls.clojure-atom-db :as atom-db]
    [app.server.task-db-impls.datascript-db :as datascript-db]))
 
-(def use-atom-for-db? true)
+(def use-atom-for-db? (let [v false]
+                        (println "**** Setting use-atom-for-db? to" v)
+                        v))
 
 (defn !the-db []
+  (println "**** !the-db -- use-atom-for-db? =" use-atom-for-db?)
   (if use-atom-for-db?
     atom-db/the-db
     datascript-db/the-db))
