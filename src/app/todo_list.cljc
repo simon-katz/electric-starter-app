@@ -50,7 +50,7 @@
                       (server/create-item! v)
                       nil)))))
 
-(e/defn Todo-list [ring-request]
+(e/defn Todo-list []
   (e/client
     (binding [dom/node js/document.body]
       (e/server

@@ -68,7 +68,7 @@
       ;; index.html file not found on classpath
       (next-handler ring-req))))
 
-(def VERSION (not-empty (System/getProperty "ELECTRIC_USER_VERSION"))) ; see Dockerfile
+(def ^:const VERSION (not-empty (System/getProperty "HYPERFIDDLE_ELECTRIC_SERVER_VERSION"))) ; see Dockerfile
 
 (defn wrap-reject-stale-client
   "Intercept websocket UPGRADE request and check if client and server versions matches.
@@ -76,7 +76,7 @@
   Otherwise, the client connection is rejected gracefully."
   [next-handler]
   (fn [ring-req]
-    (let [client-version (get-in ring-req [:query-params "ELECTRIC_USER_VERSION"])]
+    (let [client-version (get-in ring-req [:query-params "HYPERFIDDLE_ELECTRIC_CLIENT_VERSION"])]
       (cond
         (nil? VERSION)             (next-handler ring-req)
         (= client-version VERSION) (next-handler ring-req)
@@ -111,11 +111,11 @@
                  (.setMinGzipSize 1024)
                  (.setHandler (.getHandler server)))))
 
-(defn start-server! [entrypoint {:keys [port resources-path manifest-path]
-                                 :or {port 8080
-                                      resources-path "public"
-                                      manifest-path "public/js/manifest.edn"}
-                                 :as config}]
+(defn start-server! [{:keys [port resources-path manifest-path]
+                      :or   {port            8080
+                             resources-path "public"
+                             manifest-path  "public/js/manifest.edn"}
+                      :as   config}]
   (try
     (let [server (ring/run-jetty (http-middleware resources-path manifest-path)
                                  (merge {:port port
@@ -127,8 +127,7 @@
                                                            (fn [ring-req]
                                                              (adapter/electric-ws-adapter
                                                               (partial adapter/electric-ws-message-handler
-                                                                       (auth/basic-authentication-request ring-req authenticate)
-                                                                       entrypoint))))}}
+                                                                       (auth/basic-authentication-request ring-req authenticate)))))}}
                                         config))
           final-port (-> server (.getConnectors) first (.getPort))]
       (println "\n👉 App server available at" (str "http://" (:host config) ":" final-port "\n"))
@@ -137,5 +136,5 @@
     (catch IOException err
       (if (instance? BindException (ex-cause err))  ; port is already taken, retry with another one
         (do (log/warn "Port" port "was not available, retrying with" (inc port))
-            (start-server! entrypoint (update config :port inc)))
+            (start-server! (update config :port inc)))
         (throw err)))))

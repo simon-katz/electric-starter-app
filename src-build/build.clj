@@ -30,7 +30,7 @@
   (shadow-api/release :prod {:debug debug,
                              :verbose verbose,
                              :config-merge [{:compiler-options {:optimizations (if optimize :advanced :simple)}
-                                             :closure-defines {'hyperfiddle.electric-client/ELECTRIC_USER_VERSION version}}]})
+                                             :closure-defines {'hyperfiddle.electric-client/VERSION version}}]})
   (shadow-server/stop!))
 
 (defn uberjar [{:keys [jar-name version optimize debug verbose]
