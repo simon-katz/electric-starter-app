@@ -15,24 +15,24 @@
       (e/client
         (dom/div
           (ui/checkbox
-            (case status :active false, :done true)
-            (e/fn [v]
-              (e/server
-                (d/transact! !conn [{:db/id id
-                                     :task/status (if v :done :active)}])
-                nil))
-            (dom/props {:id id}))
+           (case status :active false, :done true)
+           (e/fn [v]
+             (e/server
+               (d/transact! !conn [{:db/id id
+                                    :task/status (if v :done :active)}])
+               nil))
+           (dom/props {:id id}))
           (dom/label (dom/props {:for id}) (dom/text (e/server (:task/description e)))))))))
 
 (e/defn InputSubmit [F]
-  ; Custom input control using lower dom interface for Enter handling
+; Custom input control using lower dom interface for Enter handling
   (e/client
     (dom/input (dom/props {:placeholder "Buy milk"})
-      (dom/on "keydown" (e/fn [e]
-                          (when (= "Enter" (.-key e))
-                            (when-some [v (contrib.str/empty->nil (-> e .-target .-value))]
-                              (new F v)
-                              (set! (.-value dom/node) ""))))))))
+               (dom/on "keydown" (e/fn [e]
+                                   (when (= "Enter" (.-key e))
+                                     (when-some [v (contrib.str/empty->nil (-> e .-target .-value))]
+                                       (new F v)
+                                       (set! (.-value dom/node) ""))))))))
 
 (e/defn TodoCreate []
   (e/client
@@ -44,13 +44,13 @@
 
 #?(:clj (defn todo-count [db]
           (count
-            (d/q '[:find [?e ...] :in $ ?status
-                   :where [?e :task/status ?status]] db :active))))
+           (d/q '[:find [?e ...] :in $ ?status
+                  :where [?e :task/status ?status]] db :active))))
 
 #?(:clj (defn todo-records [db]
           (->> (d/q '[:find [(pull ?e [:db/id :task/description]) ...]
                       :where [?e :task/status]] db)
-            (sort-by :task/description))))
+               (sort-by :task/description))))
 
 (e/defn Todo-list [ring-request]
   (e/client
@@ -65,8 +65,10 @@
                      (TodoCreate.)
                      (dom/div {:class "todo-items"}
                               (e/server
-                                (e/for-by :db/id [{:keys [db/id]} (todo-records db)]
+                                (e/for-by :db/id
+                                    [{:keys [db/id]} (todo-records db)]
                                   (TodoItem. id))))
                      (dom/p (dom/props {:class "counter"})
-                            (dom/span (dom/props {:class "count"}) (dom/text (e/server (todo-count db))))
+                            (dom/span (dom/props {:class "count"})
+                                      (dom/text (e/server (todo-count db))))
                             (dom/text " items left")))))))))
