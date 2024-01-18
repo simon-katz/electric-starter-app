@@ -5,7 +5,7 @@
             app.electric-server-java8-jetty9))
 
 (def electric-server-config
-  {:host "0.0.0.0", :port 8080, :resources-path "public"})
+  {:host "0.0.0.0", :port 8081, :resources-path "public"})
 
 (defn -main [& args] ; run with `clj -M -m prod`
   (when (clojure.string/blank? (System/getProperty "HYPERFIDDLE_ELECTRIC_SERVER_VERSION"))

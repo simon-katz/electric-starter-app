@@ -20,7 +20,7 @@ RUN clojure -X:build uberjar :jar-name "app.jar" :verbose true :version '"'$VERS
 FROM amazoncorretto:11 AS app
 WORKDIR /app
 COPY --from=build /app/app.jar app.jar
-EXPOSE 8080
+EXPOSE 8081
 ARG VERSION
 ENV VERSION=$VERSION
 CMD java -DHYPERFIDDLE_ELECTRIC_SERVER_VERSION=$VERSION -jar app.jar
