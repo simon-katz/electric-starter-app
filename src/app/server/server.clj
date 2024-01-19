@@ -14,9 +14,6 @@
     atom-db/the-db
     datascript-db/the-db))
 
-;; TODO: Copy this to a new repo where the DB is a set of rules and
-;;       events, and have at it!
-
 (defn !db-ref []
   (task-db/get-!db-ref (!the-db)))
 
