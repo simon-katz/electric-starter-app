@@ -16,6 +16,14 @@
 ;;       OH!
 ;;       - But it has "Prod build" (see https://github.com/simon-katz/electric-fiddle).
 
+;; TODO: What is this `db` here, and how is it set up in the
+;;       `app.todo-list` namespace?
+;;       - Oh! See the binding of `db` in `app.todo-list`.\
+;;       - `e/watch` creates a reactive value from a reference.
+;;         - The DB implementation using an atom makes things easier
+;;           to understand, because you know how atoms work and you
+;;           don't have to think about where the magic lives.
+
 (e/def db) ; injected database ref; Electric defs are always dynamic
 
 (e/defn TodoItem [id]
